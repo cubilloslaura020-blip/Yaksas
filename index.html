@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAK SAS — [POR COMPLETAR]</title>
+<meta name="description" content="Fábrica de dotaciones empresariales: calzado, chaquetas, camisas tipo polo y pantalones de trabajo.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-baja tarj-borde modo-claro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tu pedido de dotaciones</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Consultar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Yaki">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Yaki</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-compacto">
+  <div class="hero-bg efecto-ninguno"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">Dotaciones empresariales · Bogotá</div>
+      <h1>YAK SAS<span>Dotaciones empresariales</span></h1>
+      <p class="hero-sub">Calzado y ropa de trabajo para tu empresa. Explora nuestro catálogo y consulta materiales, tallas y detalles por WhatsApp.</p>
+      <a href="#catalogo" class="btn-hero">Explorar dotaciones
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">7</div><div class="lbl">Referencias en catálogo</div></div><div class="hero-stat"><div class="num">Colombia</div><div class="lbl">Cobertura nacional</div></div><div class="hero-stat"><div class="num">15 días</div><div class="lbl">Entrega aproximada</div></div></div>
+    </div>
+    </div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">De nuestra fábrica a tu empresa</div>
+    <h2>Dotaciones para <em>tu equipo de trabajo</em></h2>
+    <p>Conoce nuestras referencias de calzado y uniformes empresariales. Consulta por WhatsApp las fichas técnicas, materiales y tallas antes de realizar tu pedido. Entrega aproximada en 15 días y opción de recogida personal.</p>
+    <div class="banner-chips"><span class="chip">Efectivo</span><span class="chip">Transferencia bancaria</span><span class="chip">Envíos nacionales</span><span class="chip">Recogida personal</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">Catálogo empresarial</div><div class="sec-title">Calzado y ropa de trabajo</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">Por qué elegir YAK SAS</div><div class="sec-title">Respaldo para tu dotación</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">🧵</div><h3>Calidad en tus dotaciones</h3><p>Dotaciones empresariales con enfoque en la calidad. Consulta las fichas técnicas y los materiales de cada referencia.</p></div><div class="bcard"><div class="bcard-icono">🚚</div><h3>Entregas en toda Colombia</h3><p>Envíos nacionales y opción de recogida personal. Tiempo aproximado de entrega: 15 días; confirma los detalles por WhatsApp.</p></div><div class="bcard"><div class="bcard-icono">🛡️</div><h3>Garantía del negocio</h3><p>El negocio ofrece garantía. Consulta las condiciones, cobertura y plazos aplicables antes de realizar tu pedido.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Explora el catálogo</div>
+  <div class="sec-title">Dotaciones para conocer</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Preferencias de los visitantes</div>
+  <div class="sec-title">Referencias más votadas</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Tu opinión cuenta</div>
+  <div class="sec-title">¿Qué dotación prefieres?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Elige tu referencia favorita para ayudar a ordenar las preferencias del catálogo. Estos votos no representan ventas.</p>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>YAK SAS</h3><p>YAK SAS · Fábrica de dotaciones empresariales en Bogotá. Calzado y ropa de trabajo con envíos a toda Colombia.</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573202686114" target="_blank" rel="noopener">WhatsApp: +57 3202686114</a></li><li><a href="https://www.facebook.com/yaksasdotaciones?locale=es_LA" target="_blank" rel="noopener">Facebook</a></li><li>📍 Bogotá</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Efectivo</li><li>Transferencia bancaria</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Calzado</li><li>Uniformes</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 YAK SAS — Todos los derechos reservados</span>
+    <span>Conoce las opciones para dotar a tu equipo.</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"YAK SAS","descripcion":"Fábrica de dotaciones empresariales: calzado, chaquetas, camisas tipo polo y pantalones de trabajo.","eslogan":"[POR COMPLETAR]","ciudad":"Bogotá","cobertura":"Entregas en Bogotá y envíos a toda Colombia. Tiempo aproximado de entrega: 15 días. Recogida personal disponible; lugar y horario por confirmar por WhatsApp.","whatsapp":"573202686114","instagram":"","facebook":"https://www.facebook.com/yaksasdotaciones?locale=es_LA","tiktok":"","horarios":[],"logo":""},"tema":{"nombreEstilo":"Elegancia cálida · YAK SAS","modo":"claro","colores":{"primario":"#584738","textoSobrePrimario":"#F1EADA","fondo":"#F1EADA","fondoAlterno":"#CEC1A8","tarjeta":"#F1EADA","texto":"#584738","textoSuave":"#62594D","acento":"#B59E7D"},"fuentes":{"titulos":"Lora","cuerpo":"Inter"},"titulosMayusculas":false,"radio":6,"animaciones":"baja","fondoEfecto":"ninguno","hero":"compacto","tarjetas":"borde"},"textos":{"heroEtiqueta":"Dotaciones empresariales · Bogotá","heroTitulo":"YAK SAS","heroTituloResaltado":"Dotaciones empresariales","heroSubtitulo":"Calzado y ropa de trabajo para tu empresa. Explora nuestro catálogo y consulta materiales, tallas y detalles por WhatsApp.","heroBoton":"Explorar dotaciones","heroImagen":"https://placehold.co/600x600/png?text=Foto+pendiente","estadisticas":[{"valor":"{productos}","etiqueta":"Referencias en catálogo"},{"valor":"Colombia","etiqueta":"Cobertura nacional"},{"valor":"15 días","etiqueta":"Entrega aproximada"}],"bannerEtiqueta":"De nuestra fábrica a tu empresa","bannerTitulo":"Dotaciones para","bannerTituloResaltado":"tu equipo de trabajo","bannerTexto":"Conoce nuestras referencias de calzado y uniformes empresariales. Consulta por WhatsApp las fichas técnicas, materiales y tallas antes de realizar tu pedido. Entrega aproximada en 15 días y opción de recogida personal.","chips":["Efectivo","Transferencia bancaria","Envíos nacionales","Recogida personal"],"catalogoEtiqueta":"Catálogo empresarial","catalogoTitulo":"Calzado y ropa de trabajo","botonAgregar":"+ Agregar al pedido","beneficiosEtiqueta":"Por qué elegir YAK SAS","beneficiosTitulo":"Respaldo para tu dotación","recomendadosEtiqueta":"Explora el catálogo","recomendadosTitulo":"Dotaciones para conocer","topEtiqueta":"Preferencias de los visitantes","topTitulo":"Referencias más votadas","dueloEtiqueta":"Tu opinión cuenta","dueloTitulo":"¿Qué dotación prefieres?","dueloInfo":"Elige tu referencia favorita para ayudar a ordenar las preferencias del catálogo. Estos votos no representan ventas.","testimoniosEtiqueta":"Experiencias con YAK SAS","testimoniosTitulo":"Opiniones de nuestros clientes","horariosEtiqueta":"Atención en Bogotá","horariosTitulo":"Horarios de YAK SAS","footerTexto":"YAK SAS · Fábrica de dotaciones empresariales en Bogotá. Calzado y ropa de trabajo con envíos a toda Colombia.","footerFrase":"Conoce las opciones para dotar a tu equipo.","carritoTitulo":"Tu pedido de dotaciones","botonPagar":"Consultar pedido por WhatsApp"},"productos":[{"id":"yak-calzado-hombre","nombre":"Calzado Hombre","precio":65000,"categoria":"Calzado","imagen":"foto:ssebmm","descripcion":"Calzado para dotación empresarial. Consulta materiales, ficha técnica y tallas disponibles con YAK SAS.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-calzado-mujer","nombre":"Calzado Mujer","precio":60000,"categoria":"Calzado","imagen":"foto:yzax0a","descripcion":"Calzado para dotación empresarial. Consulta materiales, ficha técnica y tallas disponibles con YAK SAS.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-bota-dielectrica","nombre":"Bota Dieléctrica","precio":82000,"categoria":"Calzado","imagen":"foto:jcri8s","descripcion":"Consulta con YAK SAS la ficha técnica, las especificaciones de protección y las tallas disponibles antes de elegir esta referencia.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-chaquetas-empresariales","nombre":"Chaquetas Empresariales","precio":120000,"categoria":"Uniformes","imagen":"foto:yxlwth","descripcion":"Chaquetas para dotaciones empresariales. Materiales, colores y tallas por confirmar con el negocio.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-camisa-polo","nombre":"Camisa Tipo Polo","precio":28000,"categoria":"Uniformes","imagen":"foto:p71a6u","descripcion":"Camisa tipo polo para dotación empresarial. Consulta materiales, colores y tallas disponibles.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-jeans","nombre":"Jeans","precio":32000,"categoria":"Uniformes","imagen":"foto:ifl61g","descripcion":"Pantalón jeans para dotación. Referencia registrada como «Jens» en la entrevista; confirma el nombre, material y tallas con el negocio.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false},{"id":"yak-pantalon-drill","nombre":"Pantalón Drill","precio":38000,"categoria":"Uniformes","imagen":"foto:usqsh8","descripcion":"Pantalón drill para dotación empresarial. Consulta composición, colores y tallas disponibles con YAK SAS.","opciones":{"etiqueta":"Talla","valores":["[POR COMPLETAR]"]},"destacado":false}],"beneficios":[{"icono":"🧵","titulo":"Calidad en tus dotaciones","texto":"Dotaciones empresariales con enfoque en la calidad. Consulta las fichas técnicas y los materiales de cada referencia."},{"icono":"🚚","titulo":"Entregas en toda Colombia","texto":"Envíos nacionales y opción de recogida personal. Tiempo aproximado de entrega: 15 días; confirma los detalles por WhatsApp."},{"icono":"🛡️","titulo":"Garantía del negocio","texto":"El negocio ofrece garantía. Consulta las condiciones, cobertura y plazos aplicables antes de realizar tu pedido."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Efectivo","icono":"💵","tipo":"efectivo"},{"nombre":"Transferencia bancaria","icono":"🏦","tipo":"transferencia"}],"numeroTransferencia":"[POR COMPLETAR]","titular":"[POR COMPLETAR]","contraentregaDetalle":"Actualmente no se ofrece pago contraentrega. Confirma con YAK SAS cómo realizar el pago en efectivo o por transferencia."},"backend":{"url":"https://script.google.com/macros/s/AKfycbxfYY89uMRcN-EcvMJrc9VPmrQRP85SuBktb6utzmx4gvNDF4Vg4gcJVZhIl0OytIpc/exec"},"asistente":{"activo":true,"nombre":"Yaki","saludo":"¡Hola! Soy Yaki, el asistente de YAK SAS. Te ayudo a explorar nuestras dotaciones, precios y opciones de entrega. Para confirmar tallas, materiales u horarios, escríbenos por WhatsApp."},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo"],"personalizado":{"css":":root { --yak-tobacco: #B59E7D; --yak-vanilla: #F1EADA; --yak-mahogany: #584738; --yak-mountain: #AAA396; --yak-sand: #CEC1A8; }\nbody { background-color: var(--bg); color: var(--tx); }\nh1, h2, h3 { letter-spacing: -0.025em; }\np { line-height: 1.7; }\nbutton, input, select, textarea { font-family: var(--fb); }\ninput, select, textarea { background-color: var(--yak-vanilla); color: var(--yak-mahogany); border: 1px solid var(--yak-mountain); border-radius: var(--r); }\ninput::placeholder, textarea::placeholder { color: var(--tx2); opacity: 1; }\nbutton { letter-spacing: 0.015em; }\n:where(button, a, input, select, textarea):focus-visible { outline: 2px solid var(--yak-mahogany); outline-offset: 4px; }\n::selection { background: var(--yak-tobacco); color: var(--yak-mahogany); }\n.sec-label { color: var(--yak-mahogany); letter-spacing: 0.12em; }\n.sec-title { color: var(--yak-mahogany); }","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"yak-calzado-hombre":"img/calzado-hombre-ssebmm.png","yak-calzado-mujer":"img/calzado-mujer-yzax0a.png","yak-bota-dielectrica":"img/bota-dielectrica-jcri8s.png","yak-chaquetas-empresariales":"img/chaquetas-empresariales-yxlwth.png","yak-camisa-polo":"img/camisa-tipo-polo-p71a6u.png","yak-jeans":"img/jeans-ifl61g.png","yak-pantalon-drill":"img/pantalon-drill-usqsh8.png"}</script>
+<script src="script.js"></script>
+</body>
+</html>
